@@ -1,0 +1,124 @@
+function deleteData() {
+
+//---define active sheet----------------------------------------------------
+
+const ss=SpreadsheetApp.getActiveSpreadsheet();
+
+//---define specific sheets based on their name-----------------------------
+
+const monthlyData=ss.getSheetByName("Month");
+
+const database=ss.getSheetByName("Database");
+
+//---define Database Table column starting point & Last Row-----------------
+
+const databaseRow=database.getRange("Database").getRow();
+
+const databaseCol=database.getRange("Database").getColumn();
+
+const databaseLR=database.getRange(database.getMaxRows(),databaseCol).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+//---Total fixed number of columns for Database Table-----------------------
+
+const numOfCol=9;
+
+//---define Database Table column starting point----------------------------
+
+const databaseTable=database.getRange(2,1,databaseLR,numOfCol).getValues();
+
+
+//---define Criteria to be filtered by--------------------------------------
+
+const sYrCriteria = monthlyData.getRange("Selected_Year").getValue(); //selected year
+const sMoCriteria = monthlyData.getRange("Selected_Month").getValue(); //selected month
+
+const yearMonthCr = sYrCriteria + sMoCriteria;
+
+const filteredDatabaseTable=databaseTable.filter(function(e){return e[0] !== yearMonthCr; } );
+
+
+//---Define all hidden columns/rows-----------------------------------------
+
+const hiddenIncome  =monthlyData.getRange("Income_Hide");
+const hiddenIncomeC =monthlyData.getRange("Income_C");
+const hiddenFMExp   =monthlyData.getRange("FMExp_Hide");
+const hiddenFMExpC  =monthlyData.getRange("FMExp_C");
+const hiddenFNMExp  =monthlyData.getRange("FNMExp_Hide");
+const hiddenFNMExpC =monthlyData.getRange("FNMExp_C");
+const hiddenVMExp   =monthlyData.getRange("VMExp_Hide");
+const hiddenVMExpC  =monthlyData.getRange("VMExp_C");
+const hiddenVNMExp  =monthlyData.getRange("VNMExp_Hide");
+const hiddenVNMExpC =monthlyData.getRange("VNMExp_C");
+const hiddenRows    =monthlyData.getRange("Extra_Rows");
+
+//---Unhide all hidden columns/rows------------------------------------------
+
+monthlyData.unhideColumn(hiddenIncome);
+monthlyData.unhideColumn(hiddenIncomeC);
+monthlyData.unhideColumn(hiddenFMExp);
+monthlyData.unhideColumn(hiddenFMExpC);
+monthlyData.unhideColumn(hiddenFNMExp);
+monthlyData.unhideColumn(hiddenFNMExpC);
+monthlyData.unhideColumn(hiddenVMExp);
+monthlyData.unhideColumn(hiddenVMExpC);
+monthlyData.unhideColumn(hiddenVNMExp);
+monthlyData.unhideColumn(hiddenVNMExpC);
+monthlyData.unhideRow(hiddenRows);
+
+
+//--------------------------------------------------------------------------
+//---CODE BEGINS------------------------------------------------------------
+//--------------------------------------------------------------------------
+
+//---when button is pressed, dialog box appears-----------------------------
+
+const ui=SpreadsheetApp.getUi();
+
+const response=ui.alert("Delete", "Delete current month from the database?", ui.ButtonSet.YES_NO);
+
+if(response==ui.Button.NO){
+monthlyData.hideColumn(hiddenIncome);
+monthlyData.hideColumn(hiddenIncomeC);
+monthlyData.hideColumn(hiddenFMExp);
+monthlyData.hideColumn(hiddenFMExpC);
+monthlyData.hideColumn(hiddenFNMExp);
+monthlyData.hideColumn(hiddenFNMExpC);
+monthlyData.hideColumn(hiddenVMExp);
+monthlyData.hideColumn(hiddenVMExpC);
+monthlyData.hideColumn(hiddenVNMExp);
+monthlyData.hideColumn(hiddenVNMExpC);
+monthlyData.hideRow(hiddenRows);
+return; //if user presses No, then code does not run
+
+}
+
+//---if user presses Yes, then run code--------------------------------------
+
+if(response==ui.Button.YES){
+
+
+
+database.getRange("Database").clearContent();
+
+database.getRange(databaseRow,databaseCol,filteredDatabaseTable.length,numOfCol).setValues(filteredDatabaseTable);
+
+
+
+}
+
+//---Hide all unhidden columns--------------------------------------------
+
+monthlyData.hideColumn(hiddenIncome);
+monthlyData.hideColumn(hiddenIncomeC);
+monthlyData.hideColumn(hiddenFMExp);
+monthlyData.hideColumn(hiddenFMExpC);
+monthlyData.hideColumn(hiddenFNMExp);
+monthlyData.hideColumn(hiddenFNMExpC);
+monthlyData.hideColumn(hiddenVMExp);
+monthlyData.hideColumn(hiddenVMExpC);
+monthlyData.hideColumn(hiddenVNMExp);
+monthlyData.hideColumn(hiddenVNMExpC);
+monthlyData.hideRow(hiddenRows);
+
+}
+
