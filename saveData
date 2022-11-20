@@ -1,0 +1,214 @@
+function saveData() {
+
+//---define active sheet----------------------------------------------------
+
+const ss=SpreadsheetApp.getActiveSpreadsheet();
+
+//---define specific sheets based on their name-----------------------------
+
+const monthlyData=ss.getSheetByName("Month");
+
+const database=ss.getSheetByName("Database");
+
+//---define Database Table column starting point & Last Row-----------------
+
+const databaseRow=database.getRange("Database").getRow();
+
+const databaseCol=database.getRange("Database").getColumn();
+
+//defines the last row with recorded data (the +1 is so that it grabs text values, not equations...stops error)
+const databaseLR=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+//---Total fixed number of columns for Database Table-----------------------
+
+const numOfCol=9;
+
+//---define Database Table column starting point----------------------------
+
+const databaseTable=database.getRange(2,1,databaseLR,numOfCol).getValues();
+
+//---define Header Row as a reference point---------------------------------
+
+const headerRow=monthlyData.getRange("Header").getRow();
+
+//---define Criteria to be filtered by--------------------------------------
+
+const sYrCriteria = monthlyData.getRange("Selected_Year").getValue(); //selected year
+const sMoCriteria = monthlyData.getRange("Selected_Month").getValue(); //selected month
+
+const yearMonthCr = sYrCriteria + sMoCriteria;
+
+const filteredDatabaseTable=databaseTable.filter(function(e){return e[0] !== yearMonthCr; } );
+
+
+//---Define all hidden columns/rows-----------------------------------------
+
+const hiddenIncome  =monthlyData.getRange("Income_Hide");
+const hiddenIncomeC =monthlyData.getRange("Income_C");
+const hiddenFMExp   =monthlyData.getRange("FMExp_Hide");
+const hiddenFMExpC  =monthlyData.getRange("FMExp_C");
+const hiddenFNMExp  =monthlyData.getRange("FNMExp_Hide");
+const hiddenFNMExpC =monthlyData.getRange("FNMExp_C");
+const hiddenVMExp   =monthlyData.getRange("VMExp_Hide");
+const hiddenVMExpC  =monthlyData.getRange("VMExp_C");
+const hiddenVNMExp  =monthlyData.getRange("VNMExp_Hide");
+const hiddenVNMExpC =monthlyData.getRange("VNMExp_C");
+const hiddenRows    =monthlyData.getRange("Extra_Rows");
+
+//---Unhide all hidden columns/rows------------------------------------------
+
+monthlyData.unhideColumn(hiddenIncome);
+monthlyData.unhideColumn(hiddenIncomeC);
+monthlyData.unhideColumn(hiddenFMExp);
+monthlyData.unhideColumn(hiddenFMExpC);
+monthlyData.unhideColumn(hiddenFNMExp);
+monthlyData.unhideColumn(hiddenFNMExpC);
+monthlyData.unhideColumn(hiddenVMExp);
+monthlyData.unhideColumn(hiddenVMExpC);
+monthlyData.unhideColumn(hiddenVNMExp);
+monthlyData.unhideColumn(hiddenVNMExpC);
+monthlyData.unhideRow(hiddenRows);
+
+//--------------------------------------------------------------------------
+//---define Income Table rows and columns-----------------------------------
+//--------------------------------------------------------------------------
+
+const incomeRow=monthlyData.getRange("Income").getRow();
+
+const incomeCol=monthlyData.getRange("Income").getColumn();
+
+//defines the last row with recorded data (the +7 is so that it grabs text values, not equations...stops error)
+const incomeLR=monthlyData.getRange(monthlyData.getMaxRows(),incomeCol+7).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+//the true number of rows being recorded (this is where header reference is used)
+const incomeTotalRows=incomeLR-headerRow;
+
+
+//--------------------------------------------------------------------------
+//---define (fmExp) Fixed Monthly Expenses Table rows and columns-----------
+//--------------------------------------------------------------------------
+
+const fmExpRow=monthlyData.getRange("FM_Exp").getRow();
+
+const fmExpCol=monthlyData.getRange("FM_Exp").getColumn();
+
+const fmExpLR=monthlyData.getRange(monthlyData.getMaxRows(),fmExpCol+7).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+const fmExpTotalRows=fmExpLR-headerRow;
+
+
+//--------------------------------------------------------------------------
+//---define (fnmExp) Fixed Non-Monthly Expenses Table rows and columns------
+//--------------------------------------------------------------------------
+
+const fnmExpRow=monthlyData.getRange("FNM_Exp").getRow();
+
+const fnmExpCol=monthlyData.getRange("FNM_Exp").getColumn();
+
+const fnmExpLR=monthlyData.getRange(monthlyData.getMaxRows(),fnmExpCol+7).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+const fnmExpTotalRows=fnmExpLR-headerRow;
+
+
+//--------------------------------------------------------------------------
+//---define (vmExp) Variable Monthly Expenses Table rows and columns--------
+//--------------------------------------------------------------------------
+
+const vmExpRow=monthlyData.getRange("VM_Exp").getRow();
+
+const vmExpCol=monthlyData.getRange("VM_Exp").getColumn();
+
+const vmExpLR=monthlyData.getRange(monthlyData.getMaxRows(),vmExpCol+7).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+const vmExpTotalRows=vmExpLR-headerRow;
+
+
+//--------------------------------------------------------------------------
+//---define (vnmExp) Variable Non-Monthly Expenses Table rows and columns---
+//--------------------------------------------------------------------------
+
+const vnmExpRow=monthlyData.getRange("VNM_Exp").getRow();
+
+const vnmExpCol=monthlyData.getRange("VNM_Exp").getColumn();
+
+const vnmExpLR=monthlyData.getRange(monthlyData.getMaxRows(),vnmExpCol+7).getNextDataCell(SpreadsheetApp.Direction.UP).getRow();
+
+const vnmExpTotalRows=vnmExpLR-headerRow;
+
+
+//--------------------------------------------------------------------------
+//---CODE BEGINS------------------------------------------------------------
+//--------------------------------------------------------------------------
+
+//---when button is pressed, dialog box appears-----------------------------
+
+//const ui=SpreadsheetApp.getUi();
+
+// const response=ui.alert("Save", "Save current month to the database?", ui.ButtonSet.YES_NO);
+
+// if(response==ui.Button.NO){
+// monthlyData.hideColumn(hiddenIncome);
+// monthlyData.hideColumn(hiddenIncomeC);
+// monthlyData.hideColumn(hiddenFMExp);
+// monthlyData.hideColumn(hiddenFMExpC);
+// monthlyData.hideColumn(hiddenFNMExp);
+// monthlyData.hideColumn(hiddenFNMExpC);
+// monthlyData.hideColumn(hiddenVMExp);
+// monthlyData.hideColumn(hiddenVMExpC);
+// monthlyData.hideColumn(hiddenVNMExp);
+// monthlyData.hideColumn(hiddenVNMExpC);
+// monthlyData.hideRow(hiddenRows);
+// return; //if user presses No, then code does not run
+
+// }
+
+// //---if user presses Yes, then run code--------------------------------------
+
+// if(response==ui.Button.YES){
+
+
+
+database.getRange("Database").clearContent();
+
+database.getRange(databaseRow,databaseCol,filteredDatabaseTable.length,numOfCol).setValues(filteredDatabaseTable);
+
+
+
+var blankRow=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow()+1; //retrieves last row of database
+
+database.getRange(blankRow,databaseCol,incomeTotalRows,numOfCol).setValues(monthlyData.getRange(incomeRow,incomeCol,incomeTotalRows,numOfCol).getValues()); //retrieves data from income table and inputs data to database
+
+var blankRow=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow()+1; //retrieves last row of database
+
+database.getRange(blankRow,databaseCol,fmExpTotalRows,numOfCol).setValues(monthlyData.getRange(fmExpRow,fmExpCol,fmExpTotalRows,numOfCol).getValues()); //retrieves data from fixed monthly exp. table and inputs data to database
+
+var blankRow=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow()+1; //retrieves last row of database
+
+database.getRange(blankRow,databaseCol,fnmExpTotalRows,numOfCol).setValues(monthlyData.getRange(fnmExpRow,fnmExpCol,fnmExpTotalRows,numOfCol).getValues()); //retrieves data from fixed non-month exp. table and inputs data to database
+
+var blankRow=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow()+1; //retrieves last row of database
+
+database.getRange(blankRow,databaseCol,vmExpTotalRows,numOfCol).setValues(monthlyData.getRange(vmExpRow,vmExpCol,vmExpTotalRows,numOfCol).getValues()); //retrieves data from var. monthly exp. table and inputs data to database
+
+var blankRow=database.getRange(database.getMaxRows(),databaseCol+1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow()+1; //retrieves last row of database
+
+database.getRange(blankRow,databaseCol,vnmExpTotalRows,numOfCol).setValues(monthlyData.getRange(vnmExpRow,vnmExpCol,vnmExpTotalRows,numOfCol).getValues()); //retrieves data from var. non-month exp. table and inputs data to database
+
+// }
+
+//---Hide all unhidden columns--------------------------------------------
+
+monthlyData.hideColumn(hiddenIncome);
+monthlyData.hideColumn(hiddenIncomeC);
+monthlyData.hideColumn(hiddenFMExp);
+monthlyData.hideColumn(hiddenFMExpC);
+monthlyData.hideColumn(hiddenFNMExp);
+monthlyData.hideColumn(hiddenFNMExpC);
+monthlyData.hideColumn(hiddenVMExp);
+monthlyData.hideColumn(hiddenVMExpC);
+monthlyData.hideColumn(hiddenVNMExp);
+monthlyData.hideColumn(hiddenVNMExpC);
+monthlyData.hideRow(hiddenRows);
+
+}
+
