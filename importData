@@ -1,0 +1,204 @@
+function importData() {
+
+//---define active sheet----------------------------------------------------
+
+const ss=SpreadsheetApp.getActiveSpreadsheet();
+
+//---define specific sheets based on their name-----------------------------
+
+const monthlyData=ss.getSheetByName("Month");
+
+const database=ss.getSheetByName("Database");
+
+const categories=ss.getSheetByName("Categories");
+
+//---define specific ranges based on their name-----------------------------
+
+const income=monthlyData.getRange("Income");
+
+const fmExp=monthlyData.getRange("FM_Exp");
+
+const fnmExp=monthlyData.getRange("FNM_Exp");
+
+const vmExp=monthlyData.getRange("VM_Exp");
+
+const vnmExp=monthlyData.getRange("VNM_Exp");
+
+//---Total fixed number of columns for Database Table-----------------------
+
+const numOfCol=9;
+
+//---define Database Table column starting point----------------------------
+
+const databaseTable=database.getRange(2,1,database.getLastRow(),numOfCol).getValues();
+
+//---define Header Row as a reference point---------------------------------
+
+const headerRow=monthlyData.getRange("Header").getRow();
+
+//---define Criteria to be filtered by--------------------------------------
+
+const sYrCriteria = monthlyData.getRange("Selected_Year").getValue(); //selected year
+const sMoCriteria = monthlyData.getRange("Selected_Month").getValue(); //selected month
+const incCriteria = categories.getRange("C2").getValue(); //income 
+const expCriteria = categories.getRange("C3").getValue(); //expenses
+const fixCriteria = categories.getRange("D2").getValue(); //fixed
+const varCriteria = categories.getRange("D3").getValue(); //variable
+const monCriteria = categories.getRange("E2").getValue(); //monthly
+const nmoCriteria = categories.getRange("E3").getValue(); //non-monthly
+
+//---Define all hidden columns/rows-----------------------------------------
+
+const hiddenIncome  =monthlyData.getRange("Income_Hide");
+const hiddenIncomeC =monthlyData.getRange("Income_C");
+const hiddenFMExp   =monthlyData.getRange("FMExp_Hide");
+const hiddenFMExpC  =monthlyData.getRange("FMExp_C");
+const hiddenFNMExp  =monthlyData.getRange("FNMExp_Hide");
+const hiddenFNMExpC =monthlyData.getRange("FNMExp_C");
+const hiddenVMExp   =monthlyData.getRange("VMExp_Hide");
+const hiddenVMExpC  =monthlyData.getRange("VMExp_C");
+const hiddenVNMExp  =monthlyData.getRange("VNMExp_Hide");
+const hiddenVNMExpC =monthlyData.getRange("VNMExp_C");
+const hiddenRows    =monthlyData.getRange("Extra_Rows");
+
+//---Unhide all hidden columns/rows------------------------------------------
+
+monthlyData.unhideColumn(hiddenIncome);
+monthlyData.unhideColumn(hiddenIncomeC);
+monthlyData.unhideColumn(hiddenFMExp);
+monthlyData.unhideColumn(hiddenFMExpC);
+monthlyData.unhideColumn(hiddenFNMExp);
+monthlyData.unhideColumn(hiddenFNMExpC);
+monthlyData.unhideColumn(hiddenVMExp);
+monthlyData.unhideColumn(hiddenVMExpC);
+monthlyData.unhideColumn(hiddenVNMExp);
+monthlyData.unhideColumn(hiddenVNMExpC);
+monthlyData.unhideRow(hiddenRows);
+
+//--------------------------------------------------------------------------
+//---define Income Table rows and columns-----------------------------------
+//--------------------------------------------------------------------------
+
+const incomeRow=monthlyData.getRange("Income").getRow();
+
+const incomeCol=monthlyData.getRange("Income").getColumn();
+
+//defines income table based on income specific filters in database
+const oldIncome=databaseTable.filter(function(e){return e[1]==sYrCriteria && e[2]==sMoCriteria && e[3]==incCriteria && e[4]==fixCriteria && e[5]==monCriteria});
+
+//defines the last three columns of the income table
+const oldIncomeSlice = oldIncome.map(function(row){return [row[6],row[7],row[8]]});
+
+
+//--------------------------------------------------------------------------
+//---define (fmExp) Fixed Monthly Expenses Table rows and columns-----------
+//--------------------------------------------------------------------------
+
+const fmExpRow=monthlyData.getRange("FM_Exp").getRow();
+
+const fmExpCol=monthlyData.getRange("FM_Exp").getColumn();
+
+const oldFmExp=databaseTable.filter(function(e){return e[1]==sYrCriteria && e[2]==sMoCriteria && e[3]==expCriteria && e[4]==fixCriteria && e[5]==monCriteria});
+
+const oldFmExpSlice = oldFmExp.map(function(row){return [row[6],row[7],row[8]]});
+
+
+//--------------------------------------------------------------------------
+//---define (fnmExp) Fixed Non-Monthly Expenses Table rows and columns------
+//--------------------------------------------------------------------------
+
+const fnmExpRow=monthlyData.getRange("FNM_Exp").getRow();
+
+const fnmExpCol=monthlyData.getRange("FNM_Exp").getColumn();
+
+const oldFnmExp=databaseTable.filter(function(e){return e[1]==sYrCriteria && e[2]==sMoCriteria && e[3]==expCriteria && e[4]==fixCriteria && e[5]==nmoCriteria});
+
+const oldFnmExpSlice = oldFnmExp.map(function(row){return [row[6],row[7],row[8]]});
+
+
+//--------------------------------------------------------------------------
+//---define (vmExp) Variable Monthly Expenses Table rows and columns--------
+//--------------------------------------------------------------------------
+
+const vmExpRow=monthlyData.getRange("VM_Exp").getRow();
+
+const vmExpCol=monthlyData.getRange("VM_Exp").getColumn();
+
+const oldVmExp=databaseTable.filter(function(e){return e[1]==sYrCriteria && e[2]==sMoCriteria && e[3]==expCriteria && e[4]==varCriteria && e[5]==monCriteria});
+
+const oldVmExpSlice = oldVmExp.map(function(row){return [row[6],row[7],row[8]]});
+
+
+//--------------------------------------------------------------------------
+//---define (vnmExp) Variable Non-Monthly Expenses Table rows and columns---
+//--------------------------------------------------------------------------
+
+const vnmExpRow=monthlyData.getRange("VNM_Exp").getRow();
+
+const vnmExpCol=monthlyData.getRange("VNM_Exp").getColumn();
+
+const oldVnmExp=databaseTable.filter(function(e){return e[1]==sYrCriteria && e[2]==sMoCriteria && e[3]==expCriteria && e[4]==varCriteria && e[5]==nmoCriteria});
+
+const oldVnmExpSlice = oldVnmExp.map(function(row){return [row[6],row[7],row[8]]});
+
+
+//--------------------------------------------------------------------------
+//---CODE BEGINS------------------------------------------------------------
+//--------------------------------------------------------------------------
+
+//---when button is pressed, dialog box appears-----------------------------
+
+// const ui=SpreadsheetApp.getUi();
+
+// const response=ui.alert("Import", "Import current month from the database?", ui.ButtonSet.YES_NO);
+
+// if(response==ui.Button.NO){
+// monthlyData.hideColumn(hiddenIncome);
+// monthlyData.hideColumn(hiddenIncomeC);
+// monthlyData.hideColumn(hiddenFMExp);
+// monthlyData.hideColumn(hiddenFMExpC);
+// monthlyData.hideColumn(hiddenFNMExp);
+// monthlyData.hideColumn(hiddenFNMExpC);
+// monthlyData.hideColumn(hiddenVMExp);
+// monthlyData.hideColumn(hiddenVMExpC);
+// monthlyData.hideColumn(hiddenVNMExp);
+// monthlyData.hideColumn(hiddenVNMExpC);
+// monthlyData.hideRow(hiddenRows);
+// return; //if user presses No, then code does not run
+
+// }
+
+// //---if user presses Yes, then run code--------------------------------------
+
+// if(response==ui.Button.YES){
+
+monthlyData.getRange(incomeRow,incomeCol+6,income.getLastRow(),numOfCol-6).clear({contentsOnly: true});
+monthlyData.getRange(fmExpRow,fmExpCol+6,fmExp.getLastRow(),numOfCol-6).clear({contentsOnly: true});
+monthlyData.getRange(fnmExpRow,fnmExpCol+6,fnmExp.getLastRow(),numOfCol-6).clear({contentsOnly: true});
+monthlyData.getRange(vmExpRow,vmExpCol+6,vmExp.getLastRow(),numOfCol-6).clear({contentsOnly: true});
+monthlyData.getRange(vnmExpRow,vnmExpCol+6,vnmExp.getLastRow(),numOfCol-6).clear({contentsOnly: true});
+
+monthlyData.getRange(incomeRow,incomeCol+6,oldIncome.length,numOfCol-6).setValues(oldIncomeSlice);
+monthlyData.getRange(fmExpRow,fmExpCol+6,oldFmExp.length,numOfCol-6).setValues(oldFmExpSlice);
+monthlyData.getRange(fnmExpRow,fnmExpCol+6,oldFnmExp.length,numOfCol-6).setValues(oldFnmExpSlice);
+monthlyData.getRange(vmExpRow,vmExpCol+6,oldVmExp.length,numOfCol-6).setValues(oldVmExpSlice);
+monthlyData.getRange(vnmExpRow,vnmExpCol+6,oldVnmExp.length,numOfCol-6).setValues(oldVnmExpSlice);
+
+// }
+
+//---Hide all unhidden columns--------------------------------------------
+
+monthlyData.hideColumn(hiddenIncome);
+monthlyData.hideColumn(hiddenIncomeC);
+monthlyData.hideColumn(hiddenFMExp);
+monthlyData.hideColumn(hiddenFMExpC);
+monthlyData.hideColumn(hiddenFNMExp);
+monthlyData.hideColumn(hiddenFNMExpC);
+monthlyData.hideColumn(hiddenVMExp);
+monthlyData.hideColumn(hiddenVMExpC);
+monthlyData.hideColumn(hiddenVNMExp);
+monthlyData.hideColumn(hiddenVNMExpC);
+monthlyData.hideRow(hiddenRows);
+
+}
+
