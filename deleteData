@@ -1,5 +1,5 @@
 function deleteData() {
-
+//Test
 //---define active sheet----------------------------------------------------
 
 const ss=SpreadsheetApp.getActiveSpreadsheet();
