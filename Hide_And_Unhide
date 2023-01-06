@@ -1,0 +1,153 @@
+//-----Unhide/Hide Categories_Income
+
+function unhideHideCategoriesIncome() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const headerCategoriesIncome=monthlyData.getRange("Header_Categories_Income"); //define header array
+
+var test=headerCategoriesIncome.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const categoriesIncomeRow=monthlyData.getRange("Categories_Income").getRow(); //gets the row of the Categories_Income array. This will be used as a constant to compare with the test variable.
+
+if (test==categoriesIncomeRow) { //here we test if the test variable row number is equal to the Categories_Income row number or not. 
+
+  monthlyData.hideRow(monthlyData.getRange("Categories_Income")); //if the two row numbers are equal, this means the Categories_Income array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    monthlyData.unhideRow(monthlyData.getRange("Categories_Income")); //if not, this means the Categories_Income array is hidden, so we must unhide this array when the button is pressed.
+  }
+
+}
+
+//-----Unhide/Hide Income_Income
+
+function unhideHideIncomeIncome() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const incomeIncome=monthlyData.getRange("Header_Income_Income"); //define header array
+
+var test=incomeIncome.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const incomeIncomeRow=monthlyData.getRange("Income_Income").getRow(); //gets the row of the Income_Income array. This will be used as a constant to compare with the test variable.
+
+if (test==incomeIncomeRow) { //here we test if the test variable row number is equal to the Income_Income row number or not.
+  
+  monthlyData.getRange("Header_Income_Income").setFontColor(monthlyData.getRange("Header_Income_Income").getBackgroundColor()); //this changes the font color to the same color as the cell's background so the header text disapears when array is hidden
+  monthlyData.hideRow(monthlyData.getRange("Income_Income")); //if the two row numbers are equal, this means the Income_Income array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    monthlyData.getRange("Header_Income_Income").setFontColor(monthlyData.getRange("Selected_Year").getFontColor()); //this changes the font color to the same as the Selected_Year's font color so it matches the style and can be rean once array is unhidden.
+    monthlyData.unhideRow(monthlyData.getRange("Income_Income")); //if not, this means the Income_Income array is hidden, so we must unhide this array when the button is pressed.
+    
+  }
+
+}
+
+//-----Unhide/Hide Categories_Expenses
+
+function unhideHideCategoriesExpenses() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const headerCategoriesExpenses=monthlyData.getRange("Header_Categories_Expenses"); //define header array
+
+var test=headerCategoriesExpenses.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const categoriesExpensesRow=monthlyData.getRange("Categories_Expenses").getRow(); //gets the row of the Categories_Expenses array. This will be used as a constant to compare with the test variable.
+
+if (test==categoriesExpensesRow) { //here we test if the test variable row number is equal to the Categories_Expenses row number or not. 
+
+  monthlyData.hideRow(monthlyData.getRange("Categories_Expenses")); //if the two row numbers are equal, this means the Categories_Expenses array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    
+    monthlyData.unhideRow(monthlyData.getRange("Categories_Expenses")); //if not, this means the Categories_Expenses array is hidden, so we must unhide this array when the button is pressed.
+  }
+
+}
+
+//-----Unhide/Hide Fixed_Expenses
+
+function unhideHideFixedExpenses() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const fixedExpenses=monthlyData.getRange("Header_Fixed_Expenses"); //define header array
+
+var test=fixedExpenses.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const fixedExpensesRow=monthlyData.getRange("Fixed_Expenses").getRow(); //gets the row of the Fixed_Expenses array. This will be used as a constant to compare with the test variable.
+
+if (test==fixedExpensesRow) { //here we test if the test variable row number is equal to the Fixed_Expenses row number or not.
+  
+  monthlyData.getRange("Header_Fixed_Expenses").setFontColor(monthlyData.getRange("Header_Fixed_Expenses").getBackgroundColor()); //this changes the font color to the same color as the cell's background so the header text disapears when array is hidden
+  monthlyData.hideRow(monthlyData.getRange("Fixed_Expenses")); //if the two row numbers are equal, this means the Fixed_Expenses array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    monthlyData.getRange("Header_Fixed_Expenses").setFontColor(monthlyData.getRange("Selected_Year").getFontColor()); //this changes the font color to the same as the Selected_Year's font color so it matches the style and can be rean once array is unhidden.
+    monthlyData.unhideRow(monthlyData.getRange("Fixed_Expenses")); //if not, this means the Fixed_Expenses array is hidden, so we must unhide this array when the button is pressed.
+    
+  }
+
+}
+
+//-----Unhide/Hide Buckets_Savings
+
+function unhideHideBucketsSavings() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const headerBucketsSavings=monthlyData.getRange("Header_Buckets_Savings"); //define header array
+
+var test=headerBucketsSavings.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const bucketsSavingsRow=monthlyData.getRange("Buckets_Savings").getRow(); //gets the row of the Buckets_Savings array. This will be used as a constant to compare with the test variable.
+
+if (test==bucketsSavingsRow) { //here we test if the test variable row number is equal to the Buckets_Savings row number or not. 
+
+  monthlyData.hideRow(monthlyData.getRange("Buckets_Savings")); //if the two row numbers are equal, this means the Buckets_Savings array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    monthlyData.unhideRow(monthlyData.getRange("Buckets_Savings")); //if not, this means the Buckets_Savings array is hidden, so we must unhide this array when the button is pressed.
+  }
+
+}
+
+//-----Unhide/Hide Savings_Savings
+
+function unhideHideSavingsSavings() {
+
+const ss=SpreadsheetApp.getActiveSpreadsheet(); //we are using google sheets
+
+const monthlyData=ss.getSheetByName("transactions"); //define the sheet we are working on
+
+const savingsSavings=monthlyData.getRange("Header_Savings_Savings"); //define header array
+
+var test=savingsSavings.getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow(); //get the next row number below the header. The row number will change based on if the cells below are hidden or not. This will change so it must be a variable.
+
+const savingsSavingsRow=monthlyData.getRange("Savings_Savings").getRow(); //gets the row of the Savings_Savings array. This will be used as a constant to compare with the test variable.
+
+if (test==savingsSavingsRow) { //here we test if the test variable row number is equal to the Savings_Savings row number or not.
+  
+  monthlyData.getRange("Header_Savings_Savings").setFontColor(monthlyData.getRange("Header_Savings_Savings").getBackgroundColor()); //this changes the font color to the same color as the cell's background so the header text disapears when array is hidden
+  monthlyData.hideRow(monthlyData.getRange("Savings_Savings")); //if the two row numbers are equal, this means the Savings_Savings array is unhidden, so we must hide this array when the button is pressed.
+  }
+  else {
+    monthlyData.getRange("Header_Savings_Savings").setFontColor(monthlyData.getRange("Selected_Year").getFontColor()); //this changes the font color to the same as the Selected_Year's font color so it matches the style and can be rean once array is unhidden.
+    monthlyData.unhideRow(monthlyData.getRange("Savings_Savings")); //if not, this means the Savings_Savings array is hidden, so we must unhide this array when the button is pressed.
+    
+  }
+
+}
